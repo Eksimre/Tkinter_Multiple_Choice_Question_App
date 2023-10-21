@@ -4,14 +4,14 @@ from tkinter import *
 
 window = Tk()
 window.title("Calculator")
-window.minsize(width=250, height=260)
+window.minsize(width=250, height=280)
 window.config(padx=20, pady=20)
 window.resizable(0,0)
 
 #I prepared an English-Turkish dictionary in Excel
 #We read the Excel file and convert it into a dictionary
 #specify the file path
-path = "Specify the file path!"
+path = "specify the file path"
 read = pd.read_excel(path)
 ing = list(read.ing)
 tr = list(read.tr)
@@ -37,31 +37,39 @@ def data():
     answers = (list_cevap + rdb1 + rdb2 + rdb3)
     random.shuffle(answers)
 
+count1 = 0
+count2 = 0
 def start():
     data()
 
     global word
     global question
 
+
     button.config(state=DISABLED)
     label.config(text="")
     label2.config(text="")
-
+    label3.config(text="")
 
 
     def result():
+        global count1
+        global count2
 
         a = str(radio.get())
 
         if a == cevap:
             button.config(state=NORMAL)
             label.config(text="Correct.", font=("Ariel", 10, "bold"))
+            label3.config(text="{} = {}".format(soru, cevap), font=("Ariel", 10, "bold"), fg="blue")
             word.destroy()
             question.destroy()
             rad_but1.destroy()
             rad_but2.destroy()
             rad_but3.destroy()
             rad_but4.destroy()
+            count1 += 1
+            label_count1.config(text="Correct={}".format(count1), font=("Ariel", 10, "bold"), fg="blue")
         else:
             button.config(state=NORMAL)
             label.config(text="Wrong!", font=("Ariel", 10, "bold"))
@@ -72,6 +80,8 @@ def start():
             rad_but2.destroy()
             rad_but3.destroy()
             rad_but4.destroy()
+            count2 += 1
+            label_count2.config(text="Wrong={}".format(count2), font=("Ariel", 10, "bold"), fg="red")
 
     word = Label(text=soru, font=("Ariel", 10, "bold"), fg="red")
     word.pack()
@@ -88,7 +98,6 @@ def start():
     rad_but4.pack()
 
 
-
 button = Button(text="Start", command=start, font=("Ariel", 10, "bold"))
 button.pack()
 
@@ -97,5 +106,13 @@ label.pack()
 
 label2 = Label()
 label2.pack()
+
+label3 = Label()
+label3.pack()
+
+label_count1 = Label()
+label_count1.place(x=150, y=-3)
+label_count2 = Label()
+label_count2.place(x=150, y=20)
 
 window.mainloop()
